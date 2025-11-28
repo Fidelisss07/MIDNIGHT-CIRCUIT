@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1764304367552,
+    "nome": "Fidelis (CEO)",
+    "email": "gufidelis116@gmail.com",
+    "senha": "gulipe116",
+    "avatar": "http://localhost:3000/uploads/1764334354906.png",
+    "capa": "http://localhost:3000/uploads/1764334354917.png",
+    "bio": "CEO DA MIDNIGHT CIRCUIT",
+    "xp": 300,
+    "nivel": 1,
+    "seguindo": [
+      "waidaiwdkawid@gmail.com"
+    ]
+  },
+  {
+    "id": 1764307801001,
+    "nome": "lais loureço",
+    "email": "waidaiwdkawid@gmail.com",
+    "senha": "293i192313i192",
+    "avatar": "https://ui-avatars.com/api/?name=lais loureço&background=ef4444&color=fff",
+    "capa": "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1000",
+    "bio": "Novo piloto",
+    "xp": 0,
+    "nivel": 1,
+    "seguidores": [
+      "gufidelis116@gmail.com"
+    ]
+  }
+]

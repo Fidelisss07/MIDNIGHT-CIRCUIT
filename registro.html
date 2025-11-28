@@ -1,0 +1,23 @@
+<!DOCTYPE html><html class="dark" lang="pt"><head><meta charset="utf-8"/><title>Registo</title><script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"/><script>tailwind.config={theme:{extend:{colors:{primary:"#ef4444"}}}}</script><style>body{font-family:'Space Grotesk',sans-serif}</style></head>
+<body class="bg-black h-screen flex items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 z-0"><div class="absolute inset-0 bg-black/70 z-10"></div><img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2500" class="w-full h-full object-cover"></div>
+<div class="relative z-20 w-full max-w-md p-8 bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl">
+    <div class="text-center mb-6"><h1 class="text-3xl font-bold text-white">Nova Carta</h1></div>
+    <div class="space-y-3">
+        <input type="text" id="nome" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white outline-none focus:border-primary" placeholder="Nome de Piloto">
+        <input type="email" id="email" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white outline-none focus:border-primary" placeholder="Email">
+        <input type="password" id="senha" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white outline-none focus:border-primary" placeholder="Senha">
+        <button onclick="registar()" class="w-full bg-white hover:bg-gray-200 text-black font-bold py-3 rounded-xl mt-4">Criar Conta</button>
+    </div>
+    <div class="mt-6 text-center text-sm text-gray-400">Já tens conta? <a href="login.html" class="text-white font-bold hover:underline">Entrar</a></div>
+</div>
+<script>
+async function registar(){
+    const nome=document.getElementById('nome').value, email=document.getElementById('email').value, senha=document.getElementById('senha').value;
+    if(!nome||!email||!senha) return alert("Preenche tudo!");
+    try{
+        const res = await fetch('http://localhost:3000/registro',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nome,email,senha})});
+        if(res.ok){ alert("Sucesso!"); window.location.href='login.html'; } else alert(await res.text());
+    }catch(e){alert("Erro.");}
+}
+</script></body></html>

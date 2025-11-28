@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt">
+<head>
+    <meta charset="utf-8"/>
+    <title>Midnight Feed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css"/>
+    
+    <style>
+        .story-ring {
+            padding: 2px;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        .story-ring.midnight { background: linear-gradient(45deg, #ef4444, #a855f7); }
+        .story-ring:hover { transform: scale(1.1); cursor: pointer; }
+        .legenda-overlay { background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
+    </style>
+
+    <script>
+        tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"rgb(var(--primary) / <alpha-value>)", "background-dark":"var(--bg-dark)", "surface-dark":"var(--surface)"},fontFamily:{"display":["Space Grotesk","sans-serif"]}}}}
+    </script>
+</head>
+<body class="bg-background-dark text-gray-200 overflow-hidden">
+
+<div class="relative flex h-screen w-full">
+    
+    <aside class="hidden md:flex flex-col items-center w-20 h-full border-r border-white/10 bg-black/50 backdrop-blur-md py-6 z-20">
+        <a class="mb-10 text-primary hover:scale-110 transition-transform" href="feed.html"><span class="material-symbols-outlined text-4xl">directions_car</span></a>
+        <nav class="flex flex-col gap-8 w-full px-2">
+            <a href="feed.html" class="flex justify-center p-3 rounded-xl bg-primary/20 text-primary"><span class="material-symbols-outlined">home</span></a>
+            <a href="explorar.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">search</span></a>
+            <a href="sprints.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">bolt</span></a>
+            <a href="comunidades-hub.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">groups</span></a>
+            <a href="chat.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">chat_bubble</span></a>
+            <a href="notificacoes.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">notifications</span></a>
+            <a href="perfil.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">person</span></a>
+        </nav>
+        <div class="mt-auto flex flex-col gap-3 items-center"><button onclick="document.getElementById('menu-temas').classList.toggle('hidden')" class="p-2 text-gray-400 hover:text-white"><span class="material-symbols-outlined">palette</span></button><button onclick="logout()" class="p-2 text-gray-400 hover:text-red-500"><span class="material-symbols-outlined">logout</span></button><div id="sidebar-avatar" class="w-8 h-8 rounded-full bg-cover border-2 border-primary"></div></div>
+    </aside>
+    
+    <div id="menu-temas" class="hidden absolute bottom-20 left-16 bg-surface-dark border border-white/10 p-4 rounded-xl shadow-2xl z-50 flex-col gap-2 w-48"><button onclick="mudar('theme-red')" class="text-white text-sm">🔴 Red</button><button onclick="mudar('theme-purple')" class="text-white text-sm">🟣 Purple</button><button onclick="mudar('theme-blue')" class="text-white text-sm">🔵 Blue</button><button onclick="mudar('theme-light')" class="text-white text-sm">⚪ Light</button></div>
+
+    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar">
+        <div class="max-w-7xl mx-auto p-4 md:p-8">
+            <header class="mb-8 flex justify-between items-center">
+                <div><h1 class="text-4xl font-bold text-white">Feed</h1><p class="text-gray-500 text-sm">A garagem de <span class="text-primary font-bold" id="header-nome">...</span></p></div>
+            </header>
+            
+            <section class="mb-10 overflow-x-auto pb-4 no-scrollbar">
+                <div class="flex gap-6 min-w-max items-center" id="stories-container">
+                    <div onclick="document.getElementById('inputStory').click()" class="cursor-pointer flex flex-col items-center gap-2 group">
+                        <div class="w-16 h-16 rounded-full border-2 border-white/20 p-1 relative group-hover:border-primary transition-colors">
+                            <div id="story-avatar-me" class="w-full h-full rounded-full bg-surface-dark flex items-center justify-center bg-cover">
+                                <div class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center group-hover:bg-primary/40 transition-colors">
+                                    <span class="material-symbols-outlined text-white font-bold">add</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-xs text-white font-bold">Novo Story</span>
+                        <input type="file" id="inputStory" class="hidden" accept="image/*,video/*" onchange="uploadStory(event)">
+                    </div>
+                    <div id="outros-stories" class="flex gap-5"></div>
+                </div>
+            </section>
+
+            <div class="mb-12 bg-surface-dark rounded-2xl p-6 border border-white/5 relative group glow-hover"><div class="absolute top-0 left-0 w-1 h-full bg-primary"></div><div class="flex gap-4"><div id="input-avatar" class="w-12 h-12 rounded-full bg-cover border border-white/10"></div><div class="flex-1"><textarea id="conteudo" placeholder="Partilha a tua máquina..." class="w-full bg-transparent border-none text-white focus:ring-0 resize-none h-12"></textarea><div id="preview" class="hidden mt-4 h-64 bg-black rounded-lg flex items-center justify-center overflow-hidden"></div><div class="flex justify-between mt-4 border-t border-white/5 pt-4"><label class="cursor-pointer text-primary text-sm font-bold flex gap-2"><span class="material-symbols-outlined">perm_media</span> Mídia<input type="file" id="imgInp" class="hidden" accept="image/*,video/*" onchange="verImg(event)"></label><button onclick="postar()" id="btn-pub" class="bg-primary text-white px-6 py-1 rounded-full font-bold hover:brightness-110 transition-all">Publicar</button></div></div></div></div>
+            
+            <div id="lista" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[350px]"></div>
+        </div>
+    </main>
+</div>
+
+<div id="story-viewer" class="hidden fixed inset-0 z-[60] bg-black flex flex-col">
+    <div class="h-1 w-full flex gap-1 p-2" id="story-bars"></div>
+    <div class="flex justify-between items-center p-4 absolute top-4 w-full z-10">
+        <div class="flex items-center gap-3"><img id="viewer-avatar" class="w-10 h-10 rounded-full border border-white"><span id="viewer-nome" class="font-bold text-white shadow-black drop-shadow-md">User</span></div>
+        <button onclick="fecharStory()" class="text-white"><span class="material-symbols-outlined text-3xl">close</span></button>
+    </div>
+    <div class="flex-1 flex items-center justify-center bg-black" id="viewer-content"></div>
+</div>
+
+<div id="modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
+    <div class="bg-surface-dark w-full max-w-6xl h-[85vh] rounded-xl flex shadow-2xl relative overflow-hidden">
+        <button onclick="fechar()" class="absolute top-4 right-4 text-white z-50 bg-black/50 rounded-full p-1"><span class="material-symbols-outlined">close</span></button>
+        <div class="w-full md:w-[60%] bg-black flex items-center justify-center" id="m-content"></div>
+        <div class="hidden md:flex w-[40%] flex-col bg-surface-dark border-l border-white/10">
+            <div class="p-4 border-b border-white/10 flex gap-3 items-center">
+                <img id="m-av" class="w-10 h-10 rounded-full border border-primary object-cover">
+                <div><h3 id="m-nome" class="text-white font-bold text-sm"></h3><p class="text-xs text-gray-500">Autor</p></div>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+                <div class="flex gap-3 mb-6 bg-white/5 p-3 rounded-lg"><p class="text-white text-sm leading-relaxed"><span id="m-legenda" class="text-gray-300"></span></p></div>
+                <div id="m-coms" class="space-y-4"></div>
+            </div>
+            <div class="p-4 border-t border-white/10 bg-surface-dark">
+                <div class="flex gap-4 text-white mb-2">
+                    <button onclick="likeModal()" class="hover:text-primary transition-colors group"><span id="btn-like-icon" class="material-symbols-outlined group-hover:scale-110 transition-transform">favorite</span></button>
+                    <button class="hover:text-primary"><span class="material-symbols-outlined">chat_bubble</span></button>
+                </div>
+                <p id="m-likes" class="text-white font-bold text-sm">0 likes</p>
+                <div class="flex gap-2 mt-3">
+                    <input id="m-inp" type="text" class="bg-black/30 border border-white/10 rounded-full px-4 py-2 text-white w-full focus:ring-1 focus:ring-primary focus:border-primary text-sm" placeholder="Comentar...">
+                    <button onclick="comentar()" class="text-primary font-bold text-sm hover:text-white px-2">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const URL_SERVIDOR='http://localhost:3000'; let pid=null;
+
+    // 1. SEGURANÇA E LOGIN
+    const dadosSalvos = localStorage.getItem('usuario_logado');
+    if (!dadosSalvos) window.location.href = 'login.html';
+    const USUARIO_ATUAL = JSON.parse(dadosSalvos);
+    const temaSalvo = localStorage.getItem('midnight_tema') || 'theme-red';
+    document.body.className = `${temaSalvo} bg-background-dark text-gray-200 overflow-hidden`;
+
+    function logout() { localStorage.removeItem('usuario_logado'); window.location.href = 'login.html'; }
+
+    // Preencher visuais
+    document.getElementById('header-nome').innerText=USUARIO_ATUAL.nome;
+    document.getElementById('sidebar-avatar').style.backgroundImage=`url('${USUARIO_ATUAL.avatar}')`;
+    document.getElementById('input-avatar').style.backgroundImage=`url('${USUARIO_ATUAL.avatar}')`;
+    document.getElementById('story-avatar-me').style.backgroundImage=`url('${USUARIO_ATUAL.avatar}')`;
+
+    function mudar(t){localStorage.setItem('midnight_tema',t);document.body.className=`${t} bg-background-dark text-gray-200 overflow-hidden`;document.getElementById('menu-temas').classList.add('hidden');}
+
+    // PREVIEW
+    function verImg(e){
+        const file = e.target.files[0];
+        if(file){
+            const container = document.getElementById('preview');
+            container.classList.remove('hidden'); container.innerHTML = '';
+            const media = URL.createObjectURL(file);
+            if (file.type.startsWith('video')) container.innerHTML = `<video src="${media}" class="w-full h-full object-cover" autoplay muted loop></video>`;
+            else container.innerHTML = `<img src="${media}" class="w-full h-full object-cover">`;
+        }
+    }
+    function limparImagem() { document.getElementById('imgInp').value = ''; document.getElementById('preview').classList.add('hidden'); document.getElementById('preview').innerHTML = ''; }
+
+    // CARREGAR POSTS
+    async function load(){
+        const r=await fetch(`${URL_SERVIDOR}/posts`);
+        const p=await r.json();
+        document.getElementById('lista').innerHTML=p.reverse().map((x, i) => {
+            let grid = "col-span-1 row-span-1"; if (i%5===0) grid="md:col-span-2 md:row-span-2";
+            const isVideo = x.tipo === 'video' || (x.midiaUrl && x.midiaUrl.match(/\.(mp4|webm|ogg)$/i));
+            const mediaHtml = isVideo 
+                ? `<video src="${x.midiaUrl}" class="absolute inset-0 w-full h-full object-cover pointer-events-none" muted loop></video>`
+                : `<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image: url('${x.midiaUrl || x.imagemUrl}')"></div>`;
+
+            return `<div onclick="abrir(${x.id})" class="group relative rounded-xl overflow-hidden bg-surface-dark border border-white/5 cursor-pointer glow-hover h-full">${mediaHtml}<div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex flex-col justify-end"><div class="legenda-overlay p-4 pt-12 transform translate-y-2 group-hover:translate-y-0 transition-transform"><p class="text-white text-sm font-bold truncate">${x.nome}</p><p class="text-gray-300 text-xs line-clamp-1">${x.conteudo}</p><div class="flex items-center gap-4 mt-2 text-white text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity delay-100"><span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">favorite</span> ${x.likes}</span><span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">chat_bubble</span> ${x.comentarios ? x.comentarios.length : 0}</span></div></div></div></div>`;
+        }).join('');
+        
+        document.querySelectorAll('#lista video').forEach(v => {
+            v.parentElement.addEventListener('mouseenter', () => v.play());
+            v.parentElement.addEventListener('mouseleave', () => v.pause());
+        });
+    }
+
+    // POSTAR
+    async function postar(){
+        const c=document.getElementById('conteudo').value;
+        const i=document.getElementById('imgInp').files[0];
+        const btn = document.getElementById('btn-pub');
+        if(!i&&!c)return alert('Escreve algo!');
+        
+        btn.innerText = "A enviar..."; btn.disabled = true;
+        const f=new FormData();
+        f.append('nome',USUARIO_ATUAL.nome); f.append('avatar',USUARIO_ATUAL.avatar); f.append('emailAutor',USUARIO_ATUAL.email); f.append('conteudo',c);
+        if(i) f.append('midia', i);
+
+        try { await fetch(`${URL_SERVIDOR}/posts`,{method:'POST',body:f}); document.getElementById('conteudo').value=''; limparImagem(); load(); } 
+        catch(e) { alert("Erro."); }
+        btn.innerText = "Publicar"; btn.disabled = false;
+    }
+
+    // MODAL POST
+    async function abrir(id){
+        pid=id; const res = await fetch(`${URL_SERVIDOR}/posts`); const ps=await res.json(); const p=ps.find(x=>x.id===id);
+        const mCont = document.getElementById('m-content'); mCont.innerHTML = '';
+        const isVideo = p.tipo === 'video' || (p.midiaUrl && p.midiaUrl.match(/\.(mp4|webm|ogg)$/i));
+        if (isVideo) mCont.innerHTML = `<video src="${p.midiaUrl}" class="max-w-full max-h-full" controls autoplay></video>`;
+        else mCont.innerHTML = `<img src="${p.midiaUrl || p.imagemUrl}" class="max-w-full max-h-full object-contain">`;
+        
+        document.getElementById('m-av').src=p.avatar; 
+        document.getElementById('m-nome').innerText=p.nome; 
+        document.getElementById('m-legenda').innerText=p.conteudo;
+        document.getElementById('m-likes').innerText=`${p.likes} likes`;
+        document.getElementById('btn-like-icon').classList.remove('text-primary');
+        document.getElementById('btn-like-icon').style.fontVariationSettings="'FILL' 0";
+
+        const divC = document.getElementById('m-coms'); divC.innerHTML='';
+        if(p.comentarios) p.comentarios.forEach(c => divC.innerHTML+=`<div class="flex gap-3 mb-3"><img src="${c.avatar}" class="w-8 h-8 rounded-full object-cover"><div><p class="text-white text-sm"><span class="font-bold mr-2 text-primary">${c.autor}</span>${c.texto}</p></div></div>`);
+        document.getElementById('modal').classList.remove('hidden');
+    }
+    function fechar(){document.getElementById('modal').classList.add('hidden');pid=null;load();}
+
+    async function likeModal(){
+        if(!pid)return;
+        const icon = document.getElementById('btn-like-icon'); const txt = document.getElementById('m-likes');
+        icon.classList.add('text-primary'); icon.classList.add('animate-ping'); icon.style.fontVariationSettings="'FILL' 1";
+        txt.innerText = `${parseInt(txt.innerText)+1} likes`;
+        setTimeout(()=>icon.classList.remove('animate-ping'), 300);
+        await fetch(`${URL_SERVIDOR}/posts/like/${pid}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({quemDeuLikeNome:USUARIO_ATUAL.nome,quemDeuLikeEmail:USUARIO_ATUAL.email,quemDeuLikeAvatar:USUARIO_ATUAL.avatar})});
+    }
+
+    async function comentar(){
+        const t=document.getElementById('m-inp').value; if(!t)return;
+        const res = await fetch(`${URL_SERVIDOR}/posts/comentar/${pid}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({autor:USUARIO_ATUAL.nome,avatar:USUARIO_ATUAL.avatar,texto:t})});
+        if(res.ok) {
+            document.getElementById('m-coms').innerHTML+=`<div class="flex gap-3 mb-3"><img src="${USUARIO_ATUAL.avatar}" class="w-8 h-8 rounded-full object-cover"><div><p class="text-white text-sm"><span class="font-bold mr-2 text-primary">${USUARIO_ATUAL.nome}</span>${t}</p></div></div>`;
+            document.getElementById('m-inp').value='';
+        }
+    }
+
+    // STORIES
+    let storiesAtuais=[]; let storyIndex=0;
+    async function uploadStory(e){
+        if(e.target.files[0]){
+            const f=new FormData(); f.append('emailAutor',USUARIO_ATUAL.email); f.append('nome',USUARIO_ATUAL.nome); f.append('avatar',USUARIO_ATUAL.avatar); f.append('midia',e.target.files[0]);
+            await fetch(`${URL_SERVIDOR}/stories`,{method:'POST',body:f}); location.reload();
+        }
+    }
+    async function carregarStories(){
+        const r=await fetch(`${URL_SERVIDOR}/stories`); const s=await r.json(); const c=document.getElementById('outros-stories'); c.innerHTML='';
+        const g={}; s.forEach(x=>{if(!g[x.emailAutor])g[x.emailAutor]={nome:x.nome,avatar:x.avatar,posts:[]};g[x.emailAutor].posts.push(x)});
+        Object.values(g).forEach(gr=>{
+            if(gr.posts[0].emailAutor===USUARIO_ATUAL.email)return;
+            c.innerHTML+=`<div onclick="abrirS('${encodeURIComponent(JSON.stringify(gr.posts))}')" class="cursor-pointer flex flex-col items-center gap-2 group"><div class="story-ring midnight w-16 h-16 p-[2px]"><div class="w-full h-full rounded-full bg-cover border-2 border-background-dark" style="background-image:url('${gr.avatar}')"></div></div><span class="text-xs text-gray-300 group-hover:text-white font-bold w-16 truncate text-center">${gr.nome}</span></div>`;
+        });
+    }
+    function abrirS(d){storiesAtuais=JSON.parse(decodeURIComponent(d));storyIndex=0;showS();document.getElementById('story-viewer').classList.remove('hidden');}
+    function showS(){
+        if(storyIndex>=storiesAtuais.length){fecharStory();return;}
+        const s=storiesAtuais[storyIndex]; const vCont=document.getElementById('viewer-content'); vCont.innerHTML='';
+        const isVideo=s.tipo==='video'||s.midiaUrl.match(/\.(mp4|webm|ogg)$/i);
+        if(isVideo) vCont.innerHTML=`<video src="${s.midiaUrl}" class="max-h-full max-w-full" autoplay muted onended="proxStory()"></video>`;
+        else { vCont.innerHTML=`<img src="${s.midiaUrl}" class="max-h-full max-w-full object-contain">`; if(window.storyTimer)clearTimeout(window.storyTimer); window.storyTimer=setTimeout(proxStory,5000); }
+        document.getElementById('viewer-avatar').src=s.avatar; document.getElementById('viewer-nome').innerText=s.nome;
+        const b=document.getElementById('story-bars'); b.innerHTML=''; storiesAtuais.forEach((_,i)=>{b.innerHTML+=`<div class="flex-1 h-full rounded-full ${i<=storyIndex?'bg-white':'bg-white/30'}"></div>`});
+    }
+    function proxStory(){storyIndex++;showS();}
+    function fecharStory(){document.getElementById('story-viewer').classList.add('hidden');if(window.storyTimer)clearTimeout(window.storyTimer);}
+
+    carregarStories();
+    load();
+</script>
+</body>
+</html>

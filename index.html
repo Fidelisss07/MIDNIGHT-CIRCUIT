@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Rede Social</title>
+    <style>
+        /* Estilos simples para ficar bonito */
+        body { font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f0f2f5; }
+        h1 { text-align: center; color: #1877f2; }
+        
+        /* Caixa de criar post */
+        .caixa-post { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        input, textarea { width: 100%; margin-bottom: 10px; padding: 10px; box-sizing: border-box; }
+        button { background-color: #1877f2; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; width: 100%; }
+        button:hover { background-color: #166fe5; }
+
+        /* Lista de posts */
+        #lista-posts { margin-top: 20px; }
+        .post { background: white; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .post h3 { margin: 0 0 5px 0; color: #333; }
+        .post p { margin: 0; color: #555; }
+    </style>
+</head>
+<body>
+
+    <h1>Minha Rede Social</h1>
+
+    <div class="caixa-post">
+        <input type="text" id="nome" placeholder="O teu nome">
+        <textarea id="conteudo" placeholder="No que estás a pensar?"></textarea>
+        <button onclick="enviarPost()">Publicar</button>
+    </div>
+
+    <div id="lista-posts"></div>
+
+    <script>
+const URL_SERVIDOR = 'http://localhost:3000/posts';
+
+        async function carregarPosts() {
+            const resposta = await fetch(URL_SERVIDOR);
+            const posts = await resposta.json();
+            
+            const listaDiv = document.getElementById('lista-posts');
+            listaDiv.innerHTML = '';
+
+            posts.forEach(post => {
+                const qtdLikes = post.likes || 0; 
+
+                // Adicionei um botão de "Excluir" com estilo vermelho (style="...")
+                listaDiv.innerHTML += `
+                    <div class="post">
+                        <h3>${post.nome}</h3>
+                        <p>${post.conteudo}</p>
+                        <br>
+                        <button onclick="darLike(${post.id})">
+                            ❤️ ${qtdLikes} Curtidas
+                        </button>
+                        
+                        <button onclick="deletarPost(${post.id})" style="background-color: #ff4444; margin-left: 10px;">
+                            🗑️ Excluir
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        async function enviarPost() {
+            const nome = document.getElementById('nome').value;
+            const conteudo = document.getElementById('conteudo').value;
+
+            await fetch(URL_SERVIDOR, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome, conteudo })
+            });
+
+            document.getElementById('conteudo').value = '';
+            carregarPosts();
+        }
+
+        async function darLike(id) {
+            await fetch(`${URL_SERVIDOR}/like/${id}`, { method: 'POST' });
+            carregarPosts(); 
+        }
+
+        // --- NOVA FUNÇÃO DELETAR ---
+        async function deletarPost(id) {
+            // Pergunta se tens a certeza (para evitar cliques acidentais)
+            if (confirm("Tens a certeza que queres apagar este post?")) {
+                await fetch(`${URL_SERVIDOR}/${id}`, {
+                    method: 'DELETE'
+                });
+                carregarPosts(); // Atualiza a lista
+            }
+        }
+
+        carregarPosts();
+    </script>
+</body>
+</html>

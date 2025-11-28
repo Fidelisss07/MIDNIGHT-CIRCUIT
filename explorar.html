@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Explorar - Midnight Circuit</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: { extend: { colors: { primary: "rgb(var(--primary) / <alpha-value>)", "background-dark": "var(--bg-dark)", "surface-dark": "var(--surface)" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } }
+        }
+    </script>
+</head>
+<body class="bg-background-dark font-display text-gray-200 overflow-hidden">
+
+<script>
+    const dadosSalvos = localStorage.getItem('usuario_logado');
+    if (!dadosSalvos) window.location.href = 'login.html';
+    let USUARIO = JSON.parse(dadosSalvos);
+    
+    const temaSalvo = localStorage.getItem('midnight_tema') || 'theme-red';
+    document.body.className = `${temaSalvo} font-display text-gray-200 overflow-hidden`;
+    
+    function logout() { localStorage.removeItem('usuario_logado'); window.location.href = 'login.html'; }
+</script>
+
+<div class="relative flex h-screen w-full">
+    
+    <aside class="hidden md:flex flex-col items-center w-20 h-full border-r border-white/10 bg-black/50 backdrop-blur-md py-6 z-20">
+        <a class="mb-10 text-primary hover:scale-110 transition-transform" href="feed.html"><span class="material-symbols-outlined text-4xl">directions_car</span></a>
+        <nav class="flex flex-col gap-8 w-full px-2">
+            <a href="feed.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">home</span></a>
+            <a href="explorar.html" class="flex justify-center p-3 rounded-xl bg-primary/20 text-primary"><span class="material-symbols-outlined">search</span></a>
+            <a href="sprints.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">bolt</span></a>
+            <a href="comunidades-hub.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">groups</span></a>
+            <a href="chat.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">chat_bubble</span></a>
+            <a href="notificacoes.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">notifications</span></a>
+            <a href="perfil.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">person</span></a>
+        </nav>
+        <div class="mt-auto mb-6"><button onclick="logout()" class="p-2 rounded-full bg-surface-dark hover:bg-red-600 text-gray-400 hover:text-white transition-all"><span class="material-symbols-outlined">logout</span></button></div>
+    </aside>
+
+    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar bg-background-dark p-6 md:p-10">
+        <div class="max-w-6xl mx-auto">
+            
+            <div class="mb-12 text-center max-w-2xl mx-auto">
+                <h1 class="text-4xl font-bold text-white mb-6">Encontrar Pilotos</h1>
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                        <span class="material-symbols-outlined text-gray-500 group-focus-within:text-primary transition-colors text-2xl">search</span>
+                    </div>
+                    <input type="text" id="campo-pesquisa" onkeyup="realizarPesquisa()" 
+                        class="block w-full p-4 pl-14 text-lg text-white bg-surface-dark border border-white/10 rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-600 shadow-2xl transition-all" 
+                        placeholder="Ex: Nissan, DriftKing...">
+                </div>
+            </div>
+
+            <div id="resultados-area" class="hidden space-y-12 animate-fade-in">
+                
+                <div>
+                    <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">person</span> Pilotos
+                    </h2>
+                    <div id="grid-usuarios" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    <p id="msg-sem-usuarios" class="hidden text-gray-500 text-sm italic py-4">Nenhum piloto encontrado com esse nome.</p>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">directions_car</span> Garagens
+                    </h2>
+                    <div id="grid-carros" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+                    <p id="msg-sem-carros" class="hidden text-gray-500 text-sm italic py-4">Nenhuma máquina encontrada.</p>
+                </div>
+
+            </div>
+
+            <div id="sugestoes-iniciais" class="text-center py-20 opacity-50">
+                <span class="material-symbols-outlined text-6xl mb-4 text-gray-600">explore</span>
+                <p class="text-xl text-gray-400">Começa a digitar para pesquisar...</p>
+                <p class="text-sm text-gray-600 mt-2">Dica: Tenta procurar "Nissan" ou o nome de um amigo.</p>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script>
+    const URL_SERVIDOR = 'http://localhost:3000';
+    let timeoutPesquisa = null;
+
+    // Atualiza a sessão para saber quem já sigo
+    async function atualizarSessao() {
+        try {
+            const res = await fetch(`${URL_SERVIDOR}/perfil/dados?email=${USUARIO.email}`);
+            if(res.ok) {
+                const atualizado = await res.json();
+                localStorage.setItem('usuario_logado', JSON.stringify(atualizado));
+                return atualizado;
+            }
+        } catch(e) { console.log("Erro ao atualizar sessão"); }
+        return USUARIO;
+    }
+
+    async function realizarPesquisa() {
+        const termo = document.getElementById('campo-pesquisa').value.toLowerCase();
+        const areaResultados = document.getElementById('resultados-area');
+        const areaSugestoes = document.getElementById('sugestoes-iniciais');
+
+        // Se tiver menos de 2 letras, limpa e esconde
+        if (termo.length < 2) { 
+            areaResultados.classList.add('hidden'); 
+            areaSugestoes.classList.remove('hidden'); 
+            return; 
+        }
+
+        clearTimeout(timeoutPesquisa);
+        
+        // Aguarda 300ms após parar de digitar
+        timeoutPesquisa = setTimeout(async () => {
+            try {
+                // 1. Atualiza quem eu sigo
+                const euAtualizado = await atualizarSessao();
+                
+                // 2. Busca resultados
+                const res = await fetch(`${URL_SERVIDOR}/pesquisa?q=${termo}`);
+                const dados = await res.json();
+
+                // 3. Mostra a área
+                areaSugestoes.classList.add('hidden');
+                areaResultados.classList.remove('hidden');
+
+                // 4. Renderiza
+                renderizarUsuarios(dados.usuarios, euAtualizado);
+                renderizarCarros(dados.carros);
+
+            } catch (e) { console.error("Erro na pesquisa", e); }
+        }, 300);
+    }
+
+    function renderizarUsuarios(lista, eu) {
+        const grid = document.getElementById('grid-usuarios'); 
+        const msg = document.getElementById('msg-sem-usuarios');
+        grid.innerHTML = '';
+
+        // Filtra para não me mostrar a mim mesmo
+        const outros = lista.filter(u => u.email !== eu.email);
+
+        if (outros.length === 0) {
+            msg.classList.remove('hidden');
+        } else {
+            msg.classList.add('hidden');
+            const meusSeguindo = eu.seguindo || [];
+
+            outros.forEach(user => {
+                const jaSigo = meusSeguindo.includes(user.email);
+                // Estilo do botão muda se já sigo ou não
+                const btnClass = jaSigo ? 'bg-primary text-white border-primary' : 'bg-white/5 text-gray-400 border-white/10 hover:border-primary hover:text-white';
+                const icon = jaSigo ? 'check' : 'person_add';
+                const textoBtn = jaSigo ? 'Seguindo' : 'Seguir';
+
+                grid.innerHTML += `
+                    <div class="flex items-center gap-4 bg-surface-dark p-4 rounded-xl border border-white/5 hover:border-primary/50 transition-all group">
+                        <img src="${user.avatar}" class="w-14 h-14 rounded-full border-2 border-transparent group-hover:border-primary object-cover">
+                        <div class="flex-1">
+                            <h3 class="font-bold text-white group-hover:text-primary transition-colors">${user.nome}</h3>
+                            <p class="text-xs text-gray-500">Nível ${user.nivel || 1}</p>
+                        </div>
+                        <button onclick="seguirPessoa('${user.email}', this)" class="${btnClass} border px-3 py-1.5 rounded-lg transition-all flex items-center gap-2 text-xs font-bold">
+                            <span class="material-symbols-outlined text-sm">${icon}</span> ${textoBtn}
+                        </button>
+                    </div>
+                `;
+            });
+        }
+    }
+
+    function renderizarCarros(lista) {
+        const grid = document.getElementById('grid-carros'); 
+        const msg = document.getElementById('msg-sem-carros');
+        grid.innerHTML = '';
+
+        if (lista.length === 0) {
+            msg.classList.remove('hidden');
+        } else {
+            msg.classList.add('hidden');
+            lista.forEach(car => {
+                grid.innerHTML += `
+                    <div class="bg-surface-dark rounded-xl overflow-hidden border border-white/5 hover:border-primary/50 transition-all group">
+                        <div class="h-32 w-full bg-cover bg-center" style="background-image: url('${car.imagemUrl}')"></div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-white text-sm mb-1 truncate">${car.modelo}</h3>
+                            <p class="text-xs text-gray-500 mb-3 italic truncate">"${car.apelido || 'Stock'}"</p>
+                            
+                            <div class="flex items-center gap-2 border-t border-white/5 pt-3">
+                                <span class="text-[10px] text-gray-400">Dono:</span>
+                                <span class="text-xs font-bold text-primary truncate">${car.dono}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    }
+
+    async function seguirPessoa(emailAlvo, btn) {
+        try {
+            const res = await fetch(`${URL_SERVIDOR}/seguir`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ eu: USUARIO.email, ele: emailAlvo })
+            });
+
+            if (res.ok) {
+                const dados = await res.json();
+                const icon = btn.querySelector('span');
+                // Alterna visualmente o botão
+                if (dados.aSeguir) {
+                    btn.className = 'bg-primary text-white border border-primary px-3 py-1.5 rounded-lg transition-all flex items-center gap-2 text-xs font-bold';
+                    btn.innerHTML = '<span class="material-symbols-outlined text-sm">check</span> Seguindo';
+                } else {
+                    btn.className = 'bg-white/5 text-gray-400 border border-white/10 hover:border-primary hover:text-white px-3 py-1.5 rounded-lg transition-all flex items-center gap-2 text-xs font-bold';
+                    btn.innerHTML = '<span class="material-symbols-outlined text-sm">person_add</span> Seguir';
+                }
+                // Atualiza sessão em background
+                atualizarSessao();
+            }
+        } catch (e) { alert("Erro ao seguir."); }
+    }
+</script>
+
+</body>
+</html>

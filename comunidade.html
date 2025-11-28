@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Midnight Circuit - Comunidade</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+    
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        :root { --color-primary: 239 68 68; } /* Vermelho Padrão */
+    </style>
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "rgb(var(--color-primary) / <alpha-value>)",
+                        "background-dark": "#050505",
+                        "surface-dark": "#121212",
+                        "surface-light": "#1E1E1E",
+                    },
+                    fontFamily: { "display": ["Space Grotesk", "sans-serif"] },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-dark font-display text-gray-200 overflow-hidden">
+
+<div class="relative flex h-screen w-full">
+    
+    <aside class="hidden md:flex flex-col items-center w-20 h-full border-r border-white/10 bg-black/50 backdrop-blur-md py-6 z-20">
+<nav class="flex flex-col gap-8 w-full px-2">
+    <a href="feed.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors">
+        <span class="material-symbols-outlined">home</span>
+    </a>
+    
+    <a href="comunidades-hub.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors">
+        <span class="material-symbols-outlined">explore</span>
+    </a>
+    
+    <a href="perfil.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors">
+        <span class="material-symbols-outlined">person</span>
+    </a>
+</nav>
+    </aside>
+
+    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar bg-background-dark">
+        <div class="max-w-4xl mx-auto p-4 md:p-8">
+            
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-white flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">groups</span> Comunidade
+                    </h1>
+                    <p class="text-gray-500 text-sm">Debates, dúvidas e projetos da garagem.</p>
+                </div>
+                <button class="bg-primary hover:bg-red-600 text-white px-5 py-2.5 rounded-lg font-bold flex items-center gap-2 text-sm shadow-lg shadow-primary/20 transition-all">
+                    <span class="material-symbols-outlined text-lg">add</span> Novo Tópico
+                </button>
+            </div>
+
+            <div class="flex gap-3 overflow-x-auto pb-4 mb-6 no-scrollbar">
+                <button class="whitespace-nowrap px-4 py-2 rounded-full bg-white text-black font-bold text-sm">🔥 Tudo</button>
+                <button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-light border border-white/10 hover:border-primary text-gray-300 hover:text-white text-sm transition-all flex items-center gap-2">
+                    🔧 Mecânica Geral
+                </button>
+                <button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-light border border-white/10 hover:border-primary text-gray-300 hover:text-white text-sm transition-all flex items-center gap-2">
+                    🔰 JDM Legends
+                </button>
+                <button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-light border border-white/10 hover:border-primary text-gray-300 hover:text-white text-sm transition-all flex items-center gap-2">
+                    🔌 Tuning & ECU
+                </button>
+                <button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-light border border-white/10 hover:border-primary text-gray-300 hover:text-white text-sm transition-all flex items-center gap-2">
+                    📢 Encontros
+                </button>
+            </div>
+
+            <div class="space-y-4">
+
+                <div class="bg-surface-dark border border-white/5 rounded-xl p-4 hover:border-white/20 transition-colors cursor-pointer group">
+                    <div class="flex gap-4">
+                        <div class="flex flex-col items-center gap-1 min-w-[40px] pt-1">
+                            <button class="text-gray-500 hover:text-primary"><span class="material-symbols-outlined">arrow_upward</span></button>
+                            <span class="font-bold text-white text-sm">342</span>
+                            <button class="text-gray-500 hover:text-blue-500"><span class="material-symbols-outlined">arrow_downward</span></button>
+                        </div>
+
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                                <span class="bg-purple-500/10 text-purple-400 px-2 py-0.5 rounded flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span> JDM Legends
+                                </span>
+                                <span>• Postado por <span class="text-gray-300 hover:underline">SkylineLover</span></span>
+                                <span>• há 2 horas</span>
+                            </div>
+
+                            <h3 class="text-lg font-bold text-white mb-2 group-hover:text-primary transition-colors">Alguém sabe onde arranjar peças para R34 em Portugal?</h3>
+                            <p class="text-gray-400 text-sm mb-3 line-clamp-2">Estou a restaurar um Skyline e está impossível encontrar painéis originais. Já tentei o eBay mas os portes são um absurdo...</p>
+                            
+                            <div class="h-48 w-full bg-cover bg-center rounded-lg mb-3 border border-white/5" style="background-image: url('https://images.unsplash.com/photo-1610862295694-399587321e16?q=80&w=1000&auto=format&fit=crop');"></div>
+
+                            <div class="flex gap-4 text-xs font-bold text-gray-500">
+                                <div class="flex items-center gap-1 hover:bg-white/5 px-2 py-1 rounded transition-colors">
+                                    <span class="material-symbols-outlined text-lg">chat_bubble</span> 45 Comentários
+                                </div>
+                                <div class="flex items-center gap-1 hover:bg-white/5 px-2 py-1 rounded transition-colors">
+                                    <span class="material-symbols-outlined text-lg">share</span> Partilhar
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-surface-dark border border-white/5 rounded-xl p-4 hover:border-white/20 transition-colors cursor-pointer group">
+                    <div class="flex gap-4">
+                        <div class="flex flex-col items-center gap-1 min-w-[40px] pt-1">
+                            <button class="text-gray-500 hover:text-primary"><span class="material-symbols-outlined">arrow_upward</span></button>
+                            <span class="font-bold text-white text-sm">89</span>
+                            <button class="text-gray-500 hover:text-blue-500"><span class="material-symbols-outlined">arrow_downward</span></button>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                                <span class="bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span> Mecânica Geral
+                                </span>
+                                <span>• Postado por <span class="text-gray-300 hover:underline">TurboGuru</span></span>
+                                <span>• há 5 horas</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-2 group-hover:text-primary transition-colors">Dúvida rápida: Óleo 5w30 ou 10w40 para motores com +200k km?</h3>
+                            <p class="text-gray-400 text-sm mb-3">Tenho um Honda Civic antigo e ouço opiniões diferentes. O manual diz 5w30 mas dizem que o 10w40 protege melhor motores velhos.</p>
+                            
+                            <div class="flex gap-4 text-xs font-bold text-gray-500">
+                                <div class="flex items-center gap-1 hover:bg-white/5 px-2 py-1 rounded transition-colors">
+                                    <span class="material-symbols-outlined text-lg">chat_bubble</span> 12 Comentários
+                                </div>
+                                <div class="flex items-center gap-1 hover:bg-white/5 px-2 py-1 rounded transition-colors">
+                                    <span class="material-symbols-outlined text-lg">share</span> Partilhar
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="bg-surface-dark border border-white/5 rounded-xl p-4 hover:border-white/20 transition-colors cursor-pointer group">
+                    <div class="flex gap-4">
+                        <div class="flex flex-col items-center gap-1 min-w-[40px] pt-1">
+                            <button class="text-gray-500 hover:text-primary"><span class="material-symbols-outlined">arrow_upward</span></button>
+                            <span class="font-bold text-white text-sm">1.2k</span>
+                            <button class="text-gray-500 hover:text-blue-500"><span class="material-symbols-outlined">arrow_downward</span></button>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                                <span class="bg-green-500/10 text-green-400 px-2 py-0.5 rounded flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span> Encontros
+                                </span>
+                                <span>• Postado por <span class="text-primary hover:underline font-bold">Admin</span></span>
+                                <span>• há 1 dia</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-2 group-hover:text-primary transition-colors">📅 Mega Encontro Midnight Circuit - Lisboa (Sábado)</h3>
+                            <p class="text-gray-400 text-sm mb-3">Pessoal, o local foi confirmado! Vai ser no parque da Expo às 22h. Tragam as máquinas limpas para as fotos.</p>
+                            
+                            <div class="flex gap-4 text-xs font-bold text-gray-500">
+                                <div class="flex items-center gap-1 hover:bg-white/5 px-2 py-1 rounded transition-colors">
+                                    <span class="material-symbols-outlined text-lg">chat_bubble</span> 203 Comentários
+                                </div>
+                                <div class="flex items-center gap-1 hover:bg-white/5 px-2 py-1 rounded transition-colors">
+                                    <span class="material-symbols-outlined text-lg">push_pin</span> Fixado
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <aside class="hidden lg:flex flex-col w-72 h-full bg-surface-dark border-l border-white/5 p-6 z-10">
+        
+        <div class="mb-8">
+            <h3 class="text-white font-bold mb-4">Sobre a Comunidade</h3>
+            <p class="text-gray-400 text-xs mb-4 leading-relaxed">O Midnight Circuit é o ponto de encontro digital para entusiastas automóveis. Respeito e paixão por motores acima de tudo.</p>
+            <div class="flex gap-4 text-center">
+                <div class="flex-1 bg-white/5 rounded-lg p-2">
+                    <div class="text-primary font-bold text-lg">14k</div>
+                    <div class="text-gray-500 text-xs uppercase">Membros</div>
+                </div>
+                <div class="flex-1 bg-white/5 rounded-lg p-2">
+                    <div class="text-green-400 font-bold text-lg flex items-center justify-center gap-1"><div class="w-2 h-2 rounded-full bg-green-400"></div> 340</div>
+                    <div class="text-gray-500 text-xs uppercase">Online</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <h3 class="text-white font-bold mb-3 text-sm uppercase text-gray-500">Regras da Pista</h3>
+            <ul class="text-sm text-gray-400 space-y-2">
+                <li class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-primary">do_not_disturb_on</span> Sem corridas ilegais</li>
+                <li class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-primary">do_not_disturb_on</span> Respeito nos debates</li>
+                <li class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-primary">check_circle</span> Use as Tags corretas</li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 class="text-white font-bold mb-3 text-sm uppercase text-gray-500">Em Alta</h3>
+            <div class="space-y-3">
+                <a href="#" class="flex items-center gap-3 group">
+                    <img src="https://i.pravatar.cc/150?img=11" class="w-8 h-8 rounded-full">
+                    <div>
+                        <p class="text-white text-sm group-hover:text-primary transition-colors">DriftKing_PT</p>
+                        <p class="text-gray-500 text-xs">Novo Recorde na Pista</p>
+                    </div>
+                </a>
+                <a href="#" class="flex items-center gap-3 group">
+                    <img src="https://i.pravatar.cc/150?img=5" class="w-8 h-8 rounded-full">
+                    <div>
+                        <p class="text-white text-sm group-hover:text-primary transition-colors">Ana_Mechanic</p>
+                        <p class="text-gray-500 text-xs">Tutorial Suspensão</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+    </aside>
+
+</div>
+
+</body>
+</html>

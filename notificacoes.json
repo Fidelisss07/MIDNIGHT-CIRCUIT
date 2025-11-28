@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1764308989341,
+    "tipo": "like",
+    "de": "lais loureço",
+    "avatar": "https://ui-avatars.com/api/?name=lais loureço&background=ef4444&color=fff",
+    "para": "gufidelis116@gmail.com",
+    "texto": "curtiu a tua máquina.",
+    "imgPreview": "http://localhost:3000/uploads/1764308563766.png",
+    "lida": true,
+    "timestamp": 1764308989341
+  },
+  {
+    "id": 1764333811956,
+    "tipo": "follow",
+    "de": "Fidelis",
+    "avatar": "https://ui-avatars.com/api/?name=Fidelis&background=ef4444&color=fff",
+    "para": "waidaiwdkawid@gmail.com",
+    "texto": "começou a seguir-te.",
+    "imgPreview": null,
+    "lida": false,
+    "timestamp": 1764333811956
+  },
+  {
+    "id": 1764335957844,
+    "tipo": "comentario",
+    "de": "Fidelis (CEO)",
+    "avatar": "http://localhost:3000/uploads/1764334354906.png",
+    "para": "gufidelis116@gmail.com",
+    "texto": "comentou.",
+    "imgPreview": "http://localhost:3000/uploads/1764335488113.mp4",
+    "lida": false,
+    "timestamp": 1764335957844
+  },
+  {
+    "id": 1764336426248,
+    "tipo": "comentario",
+    "de": "Fidelis (CEO)",
+    "avatar": "http://localhost:3000/uploads/1764334354906.png",
+    "para": "gufidelis116@gmail.com",
+    "texto": "comentou.",
+    "imgPreview": "http://localhost:3000/uploads/1764335488113.mp4",
+    "lida": false,
+    "timestamp": 1764336426248
+  },
+  {
+    "id": 1764336643897,
+    "tipo": "comentario",
+    "de": "Fidelis (CEO)",
+    "avatar": "http://localhost:3000/uploads/1764334354906.png",
+    "para": "gufidelis116@gmail.com",
+    "texto": "comentou.",
+    "imgPreview": "http://localhost:3000/uploads/1764335488113.mp4",
+    "lida": false,
+    "timestamp": 1764336643897
+  },
+  {
+    "id": 1764336719393,
+    "tipo": "comentario",
+    "de": "Fidelis (CEO)",
+    "avatar": "http://localhost:3000/uploads/1764334354906.png",
+    "para": "gufidelis116@gmail.com",
+    "texto": "comentou.",
+    "imgPreview": "http://localhost:3000/uploads/1764336654497.png",
+    "lida": false,
+    "timestamp": 1764336719393
+  }
+]
