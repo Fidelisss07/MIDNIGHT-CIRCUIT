@@ -5,7 +5,14 @@
     "avatar": "https://ui-avatars.com/api/?name=Fidelis&background=ef4444&color=fff",
     "descricao": "coco cagado",
     "videoUrl": "http://localhost:3000/uploads/1764307022974.mp4",
-    "likes": 3,
-    "comentarios": 0
+    "likes": 10,
+    "comentarios": [
+      {
+        "id": 1764349520358,
+        "autor": "Fidelis (CEO)",
+        "avatar": "http://localhost:3000/uploads/1764334354906.png",
+        "texto": "cara,bamba"
+      }
+    ]
   }
 ]

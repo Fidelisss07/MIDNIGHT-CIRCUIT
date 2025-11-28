@@ -1,23 +1,112 @@
-<!DOCTYPE html><html class="dark" lang="pt"><head><meta charset="utf-8"/><title>Login</title><script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"/><script>tailwind.config={theme:{extend:{colors:{primary:"#ef4444","background-dark":"#050505"}}}}</script><style>body{font-family:'Space Grotesk',sans-serif}</style></head>
-<body class="bg-background-dark h-screen flex items-center justify-center relative overflow-hidden">
-<div class="absolute inset-0 z-0"><div class="absolute inset-0 bg-black/60 z-10"></div><img src="https://images.unsplash.com/photo-1544614471-68f023758d88?q=80&w=2500" class="w-full h-full object-cover"></div>
-<div class="relative z-20 w-full max-w-md p-8 bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl">
-    <div class="text-center mb-8"><h1 class="text-4xl font-bold text-white mb-2">Midnight Circuit</h1><p class="text-gray-400">Entra na garagem.</p></div>
-    <div class="space-y-4">
-        <input type="email" id="email" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:border-primary outline-none" placeholder="Email">
-        <input type="password" id="senha" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:border-primary outline-none" placeholder="Senha">
-        <button onclick="fazerLogin()" class="w-full bg-primary hover:bg-red-600 text-white font-bold py-3 rounded-xl transition-all">Arrancar</button>
+<!DOCTYPE html>
+<html class="dark" lang="pt">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Login - Midnight Circuit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css"/>
+    <script src="utils.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#ef4444",
+                        "background-dark": "#050505",
+                        "surface-dark": "#121212"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background-dark h-screen flex items-center justify-center relative overflow-hidden font-display">
+
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-black/70 z-10"></div>
+        <img src="https://images.unsplash.com/photo-1544614471-68f023758d88?q=80&w=2500" class="w-full h-full object-cover opacity-60 animate-fade-in">
     </div>
-    <div class="mt-6 text-center text-sm text-gray-400">Não tens conta? <a href="registro.html" class="text-white font-bold hover:underline">Registar</a></div>
-</div>
-<script>
-async function fazerLogin(){
-    const email=document.getElementById('email').value, senha=document.getElementById('senha').value;
-    if(!email||!senha) return alert("Preenche tudo!");
-    try{
-        const res = await fetch('http://localhost:3000/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,senha})});
-        if(res.ok){ localStorage.setItem('usuario_logado', JSON.stringify(await res.json())); window.location.href='feed.html'; }
-        else alert("Dados incorretos.");
-    }catch(e){alert("Erro servidor.");}
-}
-</script></body></html>
+
+    <div class="relative z-20 w-full max-w-md p-8 bg-surface-dark/60 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl animate-slide-in">
+        
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-2 tracking-tighter">MIDNIGHT</h1>
+            <p class="text-gray-400 text-sm">A tua garagem digital.</p>
+        </div>
+
+        <div class="space-y-4">
+            <div class="group">
+                <input type="email" id="email" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 pl-4 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder-gray-500" placeholder="Email">
+            </div>
+            
+            <div class="group">
+                <input type="password" id="senha" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 pl-4 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder-gray-500" placeholder="Senha">
+            </div>
+
+            <button onclick="fazerLogin()" id="btn-login" class="w-full bg-primary hover:bg-red-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-primary/20 transition-all transform active:scale-95 mt-2">
+                Entrar na Pista
+            </button>
+        </div>
+
+        <div class="mt-6 text-center text-sm text-gray-400">
+            Ainda sem carta? 
+            <a href="registro.html" class="text-white font-bold hover:text-primary transition-colors hover:underline">Registar agora</a>
+        </div>
+    </div>
+
+    <script>
+        // Verifica se já tem login, se sim, manda para o feed direto
+        const sessao = localStorage.getItem('usuario_logado');
+        if (sessao) window.location.href = 'feed.html';
+
+        async function fazerLogin() {
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+
+            if (!email || !senha) return showToast("Preenche todos os campos!", 'error');
+
+            setBtnLoading('btn-login', true);
+
+            try {
+                const res = await fetch(`${URL_SERVIDOR}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, senha })
+                });
+
+                if (res.ok) {
+                    const usuario = await res.json();
+                    localStorage.setItem('usuario_logado', JSON.stringify(usuario));
+                    showToast("Login com sucesso! A entrar...", 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'feed.html';
+                    }, 1000);
+                } else {
+                    const erro = await res.text();
+                    // Traduz erros comuns se necessário
+                    const msg = erro.includes('senha') ? "Senha incorreta." : "Email não encontrado.";
+                    showToast(msg, 'error');
+                }
+            } catch (e) {
+                console.error(e);
+                showToast("Erro de conexão com o servidor.", 'error');
+            } finally {
+                setBtnLoading('btn-login', false);
+            }
+        }
+        
+        // Permitir Enter para login
+        document.getElementById('senha').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') fazerLogin();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Definições - Midnight Circuit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css"/>
+    <script src="utils.js"></script>
+    <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"rgb(var(--primary) / <alpha-value>)", "background-dark":"var(--bg-dark)", "surface-dark":"var(--surface)"},fontFamily:{"display":["Space Grotesk","sans-serif"]}}}}</script>
+</head>
+<body class="bg-background-dark text-gray-200 overflow-hidden">
+
+<script>
+    const USUARIO = verificarLogin(); // Usa o utils.js
+</script>
+
+<div class="relative flex h-screen w-full">
+    
+    <aside class="hidden md:flex flex-col items-center w-20 h-full border-r border-white/10 bg-black/50 backdrop-blur-md py-6 z-20">
+        <a class="mb-10 text-primary hover:scale-110 transition-transform" href="feed.html"><span class="material-symbols-outlined text-4xl">directions_car</span></a>
+        <nav class="flex flex-col gap-8 w-full px-2">
+            <a href="feed.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">home</span></a>
+            <a href="explorar.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">search</span></a>
+            <a href="sprints.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">bolt</span></a>
+            <a href="comunidades-hub.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">groups</span></a>
+            <a href="chat.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">chat_bubble</span></a>
+            <a href="notificacoes.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">notifications</span></a>
+            <a href="perfil.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">person</span></a>
+            <a href="configuracoes.html" class="flex justify-center p-3 rounded-xl bg-primary/20 text-primary"><span class="material-symbols-outlined">settings</span></a>
+            <a href="ranking.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors">
+    <span class="material-symbols-outlined">emoji_events</span>
+</a>
+        </nav>
+        <div class="mt-auto mb-6"><button onclick="logout()" class="p-2 text-gray-400 hover:text-red-500"><span class="material-symbols-outlined">logout</span></button></div>
+    </aside>
+
+    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar bg-background-dark p-6 md:p-10">
+        <div class="max-w-3xl mx-auto">
+            
+            <h1 class="text-4xl font-bold text-white mb-8">Definições da Conta</h1>
+
+            <div class="bg-surface-dark border border-white/10 rounded-2xl p-6 mb-8">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary">mail</span> Alterar Email</h2>
+                <div class="space-y-4">
+                    <p class="text-sm text-gray-400">Email atual: <span class="text-white font-mono bg-white/5 px-2 py-1 rounded" id="email-atual">...</span></p>
+                    <div class="flex gap-3">
+                        <input type="email" id="novo-email" class="flex-1 bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none" placeholder="Novo endereço de email">
+                        <button onclick="mudarEmail()" id="btn-email" class="bg-white/10 hover:bg-white/20 text-white px-6 rounded-lg font-bold transition-colors">Atualizar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-surface-dark border border-white/10 rounded-2xl p-6 mb-8">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary">lock</span> Segurança</h2>
+                <div class="space-y-4 max-w-md">
+                    <div>
+                        <label class="text-xs text-gray-500 uppercase font-bold">Senha Atual</label>
+                        <input type="password" id="senha-antiga" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500 uppercase font-bold">Nova Senha</label>
+                        <input type="password" id="senha-nova" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-primary outline-none">
+                    </div>
+                    <button onclick="mudarSenha()" id="btn-senha" class="bg-primary hover:bg-red-600 text-white px-6 py-3 rounded-lg font-bold w-full transition-colors mt-2">Alterar Senha</button>
+                </div>
+            </div>
+
+            <div class="bg-red-500/5 border border-red-500/20 rounded-2xl p-6">
+                <h2 class="text-xl font-bold text-red-500 mb-2 flex items-center gap-2"><span class="material-symbols-outlined">warning</span> Zona de Perigo</h2>
+                <p class="text-gray-400 text-sm mb-6">Apagar a conta é irreversível. Perderás todos os carros, posts e XP.</p>
+                <button onclick="apagarConta()" id="btn-del" class="text-red-500 border border-red-500/50 hover:bg-red-500 hover:text-white px-6 py-2 rounded-lg font-bold transition-all text-sm">
+                    Eliminar Conta Permanentemente
+                </button>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script>
+    // Preenche email atual
+    document.getElementById('email-atual').innerText = USUARIO.email;
+
+    async function mudarEmail() {
+        const novo = document.getElementById('novo-email').value;
+        if (!novo) return showToast("Escreve um email novo.", "error");
+        
+        setBtnLoading('btn-email', true);
+        try {
+            const res = await fetch(`${URL_SERVIDOR}/perfil/email`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ emailAtual: USUARIO.email, novoEmail: novo })
+            });
+
+            if (res.ok) {
+                const userAtualizado = await res.json();
+                localStorage.setItem('usuario_logado', JSON.stringify(userAtualizado));
+                document.getElementById('email-atual').innerText = userAtualizado.email;
+                document.getElementById('novo-email').value = '';
+                showToast("Email atualizado!");
+            } else {
+                showToast(await res.text(), "error");
+            }
+        } catch (e) { showToast("Erro de conexão", "error"); }
+        setBtnLoading('btn-email', false);
+    }
+
+    async function mudarSenha() {
+        const antiga = document.getElementById('senha-antiga').value;
+        const nova = document.getElementById('senha-nova').value;
+        
+        if (!antiga || !nova) return showToast("Preenche as senhas.", "error");
+
+        setBtnLoading('btn-senha', true);
+        try {
+            const res = await fetch(`${URL_SERVIDOR}/perfil/senha`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: USUARIO.email, senhaAntiga: antiga, senhaNova: nova })
+            });
+
+            if (res.ok) {
+                showToast("Senha alterada com sucesso!");
+                document.getElementById('senha-antiga').value = '';
+                document.getElementById('senha-nova').value = '';
+            } else {
+                showToast(await res.text(), "error");
+            }
+        } catch (e) { showToast("Erro de conexão", "error"); }
+        setBtnLoading('btn-senha', false);
+    }
+
+    async function apagarConta() {
+        const confirmacao = prompt("Para apagar, escreve 'DELETAR' na caixa abaixo:");
+        if (confirmacao !== 'DELETAR') return;
+
+        setBtnLoading('btn-del', true);
+        try {
+            const res = await fetch(`${URL_SERVIDOR}/perfil/deletar`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: USUARIO.email })
+            });
+
+            if (res.ok) {
+                alert("Conta apagada. Até à próxima!");
+                logout();
+            } else {
+                showToast("Erro ao apagar.", "error");
+            }
+        } catch (e) { showToast("Erro.", "error"); }
+        setBtnLoading('btn-del', false);
+    }
+</script>
+
+</body>
+</html>

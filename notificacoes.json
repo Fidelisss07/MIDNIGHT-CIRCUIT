@@ -64,5 +64,16 @@
     "imgPreview": "http://localhost:3000/uploads/1764336654497.png",
     "lida": false,
     "timestamp": 1764336719393
+  },
+  {
+    "id": 1764347761264,
+    "tipo": "comentario",
+    "de": "Fidelis (CEO)",
+    "avatar": "http://localhost:3000/uploads/1764334354906.png",
+    "para": "gufidelis116@gmail.com",
+    "texto": "comentou.",
+    "imgPreview": "http://localhost:3000/uploads/1764347748582.png",
+    "lida": false,
+    "timestamp": 1764347761264
   }
 ]

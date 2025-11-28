@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt">
+<head>
+    <meta charset="utf-8"/>
+    <title>Criar Clube</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css">
+    <script src="utils.js"></script>
+    <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"rgb(var(--primary) / <alpha-value>)", "background-dark":"var(--bg-dark)"}}}}</script>
+</head>
+<body class="bg-background-dark text-white flex items-center justify-center h-screen">
+<script>const USUARIO=verificarLogin();</script>
+<div class="bg-surface-dark w-full max-w-lg p-8 rounded-2xl border border-white/10 shadow-2xl">
+    <h1 class="text-2xl font-bold mb-2">Criar Nova Comunidade</h1>
+    <p class="text-gray-400 text-sm mb-6">Junta a tribo. Tu és o admin.</p>
+    <div class="space-y-4">
+        <div><label class="text-xs text-gray-500 uppercase font-bold">Nome do Clube</label><input type="text" id="com-nome" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-primary"></div>
+        <div><label class="text-xs text-gray-500 uppercase font-bold">Descrição</label><textarea id="com-desc" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white h-24 resize-none focus:border-primary"></textarea></div>
+        <div><label class="text-xs text-gray-500 uppercase font-bold">Capa</label><input type="file" id="com-img" class="w-full text-sm text-gray-400 mt-2" accept="image/*"></div>
+    </div>
+    <div class="flex justify-end gap-3 mt-8">
+        <button onclick="window.location.href='comunidades-hub.html'" class="px-4 py-2 text-gray-400 hover:text-white">Cancelar</button>
+        <button onclick="criar()" class="px-6 py-2 bg-primary rounded-lg font-bold text-white hover:bg-red-600">Criar (+150 XP)</button>
+    </div>
+</div>
+<script>
+    async function criar() {
+        const n = document.getElementById('com-nome').value;
+        const d = document.getElementById('com-desc').value;
+        const i = document.getElementById('com-img').files[0];
+        if (!n || !d) return showToast("Preenche tudo", 'error');
+        
+        const f = new FormData();
+        f.append('donoEmail', USUARIO.email); f.append('nome', n); f.append('descricao', d);
+        if(i) f.append('imagem', i);
+
+        try {
+            const res = await fetch(`${URL_SERVIDOR}/comunidades`, { method: 'POST', body: f });
+            if (res.ok) { showToast("Criada!"); setTimeout(() => window.location.href = 'comunidades-hub.html', 1000); }
+            else showToast("Erro ao criar", 'error');
+        } catch(e) { showToast("Erro de conexão", 'error'); }
+    }
+</script>
+</body>
+</html>

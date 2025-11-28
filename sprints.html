@@ -2,91 +2,305 @@
 <html class="dark" lang="pt">
 <head>
     <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Sprints - Midnight Circuit</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-    <link rel="stylesheet" href="style.css">
-    
-    <script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: { extend: { colors: { primary: "rgb(var(--primary) / <alpha-value>)", "background-dark": "var(--bg-dark)", "surface-dark": "var(--surface)" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } }
-        }
-    </script>
+    <link rel="stylesheet" href="style.css"/>
+    <script src="utils.js"></script>
+    <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"rgb(var(--primary) / <alpha-value>)", "background-dark":"var(--bg-dark)", "surface-dark":"var(--surface)"},fontFamily:{"display":["Space Grotesk","sans-serif"]}}}}</script>
 </head>
 <body class="bg-black font-display text-white overflow-hidden">
 
-<script>
-    const dadosSalvos = localStorage.getItem('usuario_logado');
-    if (!dadosSalvos) window.location.href = 'login.html';
-    const USUARIO = JSON.parse(dadosSalvos);
-    const temaSalvo = localStorage.getItem('midnight_tema') || 'theme-red';
-    document.body.className = `${temaSalvo} font-display text-white overflow-hidden bg-black`;
-    function logout() { localStorage.removeItem('usuario_logado'); window.location.href = 'login.html'; }
-</script>
+<div class="relative flex h-screen w-full flex-col md:flex-row">
+    
+    <div class="md:hidden fixed top-0 w-full h-14 bg-transparent z-40 flex items-center justify-center pointer-events-none">
+        <div class="flex gap-6 text-white font-bold drop-shadow-md pointer-events-auto">
+            <button onclick="mudarAba('foryou')" id="tab-foryou-mob" class="opacity-100 border-b-2 border-white pb-1 transition-all">Para Ti</button>
+            <div class="w-px h-5 bg-white/40"></div>
+            <button onclick="mudarAba('amigos')" id="tab-amigos-mob" class="opacity-50 hover:opacity-80 transition-all">Amigos</button>
+        </div>
+    </div>
 
-<div class="relative flex h-screen w-full">
     <aside class="hidden md:flex flex-col items-center w-20 h-full border-r border-white/10 bg-black z-20">
         <a class="mb-10 mt-6 text-primary hover:scale-110 transition-transform" href="feed.html"><span class="material-symbols-outlined text-4xl">directions_car</span></a>
         <nav class="flex flex-col gap-8 w-full px-2">
             <a href="feed.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">home</span></a>
             <a href="explorar.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">search</span></a>
             <a href="sprints.html" class="flex justify-center p-3 rounded-xl bg-primary/20 text-primary transition-colors"><span class="material-symbols-outlined">bolt</span></a>
+            
             <a href="comunidades-hub.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">groups</span></a>
             <a href="chat.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">chat_bubble</span></a>
             <a href="notificacoes.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">notifications</span></a>
             <a href="perfil.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">person</span></a>
+            <a href="ranking.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">emoji_events</span></a>
+            <a href="configuracoes.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">settings</span></a>
         </nav>
-        <div class="mt-auto mb-6"><button onclick="logout()"><span class="material-symbols-outlined text-gray-500 hover:text-red-500">logout</span></button></div>
+        <div class="mt-auto mb-6"><button onclick="logout()" class="p-2 text-gray-400 hover:text-red-500"><span class="material-symbols-outlined">logout</span></button></div>
     </aside>
 
     <main class="flex-1 relative bg-black">
-        <button onclick="document.getElementById('modal-upload-sprint').classList.remove('hidden')" class="absolute top-6 right-6 z-30 bg-primary hover:bg-red-600 text-white px-5 py-2 rounded-full font-bold text-sm flex items-center gap-2 shadow-lg hover:scale-105 transition-transform"><span class="material-symbols-outlined text-lg">videocam</span> Novo Sprint</button>
-        <div id="sprints-container" class="snap-container no-scrollbar w-full max-w-md mx-auto bg-gray-900 border-x border-white/10 md:max-w-lg lg:max-w-xl">
-            <div class="flex items-center justify-center h-screen"><p class="text-gray-500 animate-pulse">A carregar...</p></div>
+        
+        <div class="hidden md:flex absolute top-6 left-0 w-full justify-center gap-6 z-30 text-white font-bold drop-shadow-md">
+            <button onclick="mudarAba('foryou')" id="tab-foryou" class="opacity-100 border-b-2 border-white pb-1 transition-all">Para Ti</button>
+            <div class="w-px h-5 bg-white/40"></div>
+            <button onclick="mudarAba('amigos')" id="tab-amigos" class="opacity-50 hover:opacity-80 transition-all">Amigos</button>
+        </div>
+
+        <button onclick="document.getElementById('modal-upload-sprint').classList.remove('hidden')" class="absolute top-6 right-6 z-30 bg-primary hover:bg-red-600 text-white px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2 shadow-lg transition-transform hover:scale-105">
+            <span class="material-symbols-outlined text-lg">videocam</span> <span class="hidden md:inline">Novo Sprint</span>
+        </button>
+
+        <div id="sprints-container" class="snap-container no-scrollbar w-full max-w-md mx-auto bg-gray-900 border-x border-white/10 md:max-w-lg lg:max-w-xl h-full">
+            <div class="flex items-center justify-center h-full"><p class="text-gray-500 animate-pulse">A carregar...</p></div>
         </div>
     </main>
+
+    <nav class="md:hidden fixed bottom-0 w-full h-16 bg-black border-t border-white/10 z-50 flex justify-around items-center px-2">
+        <a href="feed.html" class="flex flex-col items-center text-gray-500"><span class="material-symbols-outlined text-2xl">home</span></a>
+        <a href="explorar.html" class="flex flex-col items-center text-gray-500"><span class="material-symbols-outlined text-2xl">search</span></a>
+        <a href="sprints.html" class="flex flex-col items-center text-primary"><span class="material-symbols-outlined text-2xl">bolt</span></a>
+        <a href="notificacoes.html" class="flex flex-col items-center text-gray-500"><span class="material-symbols-outlined text-2xl">notifications</span></a>
+        <a href="perfil.html" class="flex flex-col items-center text-gray-500"><span class="material-symbols-outlined text-2xl">person</span></a>
+    </nav>
+
 </div>
 
-<div id="modal-upload-sprint" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4">
+<div id="modal-upload-sprint" class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
     <div class="bg-surface-dark w-full max-w-md rounded-2xl border border-white/10 p-6 shadow-2xl">
-        <h2 class="text-xl font-bold text-white mb-4">Novo Sprint</h2>
+        <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">bolt</span> Novo Sprint
+        </h2>
         <div class="space-y-4">
-            <textarea id="sprint-desc" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white h-24 resize-none focus:border-primary" placeholder="Legenda..."></textarea>
-            <label class="block w-full border-2 border-dashed border-white/10 rounded-xl p-8 text-center cursor-pointer hover:border-primary hover:bg-white/5 transition-all"><span class="material-symbols-outlined text-4xl text-gray-500">movie</span><p class="text-sm text-gray-400 mt-2">Vídeo (MP4)</p><input type="file" id="sprint-video" accept="video/*" class="hidden"></label>
+            <textarea id="sprint-desc" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white h-24 resize-none focus:border-primary placeholder-gray-500" placeholder="Legenda..."></textarea>
+            <label class="block w-full border-2 border-dashed border-white/10 rounded-xl p-8 text-center cursor-pointer hover:border-primary hover:bg-white/5 transition-all">
+                <span class="material-symbols-outlined text-4xl text-gray-500">movie</span>
+                <p class="text-sm text-gray-400 mt-2">Vídeo (Max 5 min)</p>
+                <input type="file" id="sprint-video" accept="video/*" class="hidden" onchange="validarVideo(event)">
+            </label>
+            <p id="msg-erro" class="text-red-500 text-xs hidden text-center"></p>
         </div>
         <div class="flex justify-end gap-3 mt-6">
             <button onclick="document.getElementById('modal-upload-sprint').classList.add('hidden')" class="px-4 py-2 text-gray-400 font-bold">Cancelar</button>
-            <button onclick="publicarSprint()" class="px-6 py-2 bg-primary text-white rounded-lg font-bold">Lançar</button>
+            <button onclick="publicarSprint()" id="btn-enviar" class="px-6 py-2 bg-primary text-white rounded-lg font-bold disabled:opacity-50">Lançar</button>
         </div>
     </div>
 </div>
 
+<div id="painel-comentarios" class="fixed inset-x-0 bottom-0 z-[70] bg-surface-dark rounded-t-3xl border-t border-white/10 shadow-2xl transform translate-y-full transition-transform duration-300 md:w-[400px] md:right-0 md:left-auto md:h-full md:rounded-none md:border-l md:bottom-0 md:top-0">
+    <div class="p-4 border-b border-white/10 flex justify-between items-center">
+        <h3 class="text-white font-bold">Comentários</h3>
+        <button onclick="fecharComentarios()" class="text-gray-400 hover:text-white"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div id="lista-comentarios" class="h-[60vh] md:h-[calc(100vh-140px)] overflow-y-auto p-4 space-y-4"></div>
+    <div class="p-4 border-t border-white/10 bg-surface-dark flex gap-2 absolute bottom-0 w-full">
+        <input id="input-comentario" type="text" class="flex-1 bg-black/30 border border-white/10 rounded-full px-4 py-2 text-white focus:border-primary text-sm" placeholder="Comenta algo...">
+        <button onclick="enviarComentario()" class="text-primary font-bold text-sm px-2">Enviar</button>
+    </div>
+</div>
+
 <script>
-    const URL_SERVIDOR = 'http://localhost:3000';
-    async function carregarSprints() {
+    const USUARIO = verificarLogin(); 
+    let todosSprints = [];
+    let abaAtual = 'foryou';
+    let sprintAbertoId = null;
+
+    // 1. CARREGAR SESSÃO (Para saber quem sigo)
+    async function carregarSessao() {
         try {
-            const res = await fetch(`${URL_SERVIDOR}/sprints`); const sprints = await res.json();
-            const container = document.getElementById('sprints-container'); container.innerHTML = '';
-            if (sprints.length === 0) { container.innerHTML = `<div class="snap-child flex items-center justify-center bg-black"><div class="text-center p-8"><span class="material-symbols-outlined text-6xl text-gray-800 mb-4">no_photography</span><h2 class="text-2xl font-bold mb-2 text-white">Pista Vazia</h2></div></div>`; return; }
-            sprints.reverse().forEach(sprint => {
-                container.innerHTML += `<div class="snap-child bg-black relative"><video src="${sprint.videoUrl}" class="w-full h-full object-cover" loop autoplay muted onclick="toggleSom(this)"></video><div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 to-transparent pt-20"><div class="flex items-center gap-3 mb-3"><img src="${sprint.avatar}" class="w-10 h-10 rounded-full border-2 border-primary object-cover"><span class="font-bold text-white shadow-black">${sprint.autor}</span></div><p class="text-sm text-gray-200 line-clamp-2 shadow-black">${sprint.descricao}</p></div><div class="absolute bottom-20 right-4 flex flex-col gap-6 items-center z-20"><button onclick="likeSprint(${sprint.id}, this)" class="flex flex-col items-center gap-1 group"><div class="w-12 h-12 bg-surface-dark/50 backdrop-blur-md rounded-full flex items-center justify-center border border-white/10 group-hover:bg-surface-dark transition-all"><span class="material-symbols-outlined text-3xl text-white group-hover:text-primary transition-colors">favorite</span></div><span class="text-xs font-bold count shadow-black">${sprint.likes}</span></button><div class="w-10 h-10 bg-black/30 rounded-full flex items-center justify-center mt-4 backdrop-blur-sm"><span class="material-symbols-outlined text-white text-sm icon-som">volume_off</span></div></div></div>`;
-            });
-        } catch (e) { console.error(e); }
+            const res = await fetch(`${URL_SERVIDOR}/perfil/dados?email=${USUARIO.email}`);
+            if(res.ok) {
+                const u = await res.json();
+                localStorage.setItem('usuario_logado', JSON.stringify(u));
+                return u;
+            }
+        } catch(e) {}
+        return USUARIO;
     }
+
+    // 2. CARREGAR SPRINTS
+    async function carregarSprints() {
+        const eu = await carregarSessao();
+        const seguindo = eu.seguindo || [];
+
+        try {
+            const res = await fetch(`${URL_SERVIDOR}/sprints`);
+            todosSprints = await res.json();
+            renderizar(todosSprints, seguindo);
+        } catch(e) { console.error(e); }
+    }
+
+    function renderizar(lista, seguindo) {
+        const container = document.getElementById('sprints-container');
+        container.innerHTML = '';
+
+        let sprintsFiltrados = lista;
+        if (abaAtual === 'amigos') {
+            sprintsFiltrados = lista.filter(s => seguindo.includes(s.emailAutor));
+        }
+        
+        if (sprintsFiltrados.length === 0) {
+            container.innerHTML = `<div class="snap-child flex items-center justify-center bg-black"><div class="text-center p-8"><span class="material-symbols-outlined text-6xl text-gray-800 mb-4">no_photography</span><h2 class="text-2xl font-bold mb-2 text-white">Nada aqui</h2><p class="text-gray-500">Segue mais pilotos ou muda para 'Para Ti'.</p></div></div>`;
+            return;
+        }
+
+        sprintsFiltrados.reverse().forEach(sprint => {
+            const qtdComents = sprint.comentarios ? sprint.comentarios.length : 0;
+            container.innerHTML += `
+                <div class="snap-child bg-black relative">
+                    <video src="${sprint.videoUrl}" class="w-full h-full object-cover" loop autoplay muted onclick="toggleSom(this)"></video>
+                    
+                    <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 to-transparent pt-32 pointer-events-none">
+                        <div class="flex items-center gap-3 mb-3 pointer-events-auto">
+                            <img src="${sprint.avatar}" class="w-10 h-10 rounded-full border-2 border-primary object-cover shadow-lg">
+                            <span class="font-bold text-white shadow-black drop-shadow-md text-lg">${sprint.autor}</span>
+                        </div>
+                        <p class="text-sm text-gray-100 line-clamp-2 drop-shadow-md mb-12 md:mb-0">${sprint.descricao}</p>
+                    </div>
+
+                    <div class="absolute bottom-24 md:bottom-20 right-4 flex flex-col gap-6 items-center z-20 pointer-events-auto">
+                        <button onclick="likeSprint(${sprint.id}, this)" class="flex flex-col items-center gap-1 group">
+                            <div class="w-12 h-12 bg-surface-dark/50 backdrop-blur-md rounded-full flex items-center justify-center border border-white/10 group-hover:bg-surface-dark transition-all"><span class="material-symbols-outlined text-3xl text-white group-hover:text-primary transition-colors">favorite</span></div>
+                            <span class="text-xs font-bold shadow-black drop-shadow-md count">${sprint.likes}</span>
+                        </button>
+
+                        <button onclick="abrirComentarios(${sprint.id})" class="flex flex-col items-center gap-1 group">
+                            <div class="w-12 h-12 bg-surface-dark/50 backdrop-blur-md rounded-full flex items-center justify-center border border-white/10 group-hover:bg-surface-dark transition-all"><span class="material-symbols-outlined text-3xl text-white">chat_bubble</span></div>
+                            <span class="text-xs font-bold shadow-black drop-shadow-md">${qtdComents}</span>
+                        </button>
+                        
+                        <button onclick="toggleSom(this.parentElement.parentElement.querySelector('video'))" class="w-10 h-10 bg-black/30 rounded-full flex items-center justify-center mt-4 backdrop-blur-sm">
+                            <span class="material-symbols-outlined text-white text-sm icon-som">volume_off</span>
+                        </button>
+                    </div>
+                </div>`;
+        });
+    }
+
+    function mudarAba(aba) {
+        abaAtual = aba;
+        const tabs = ['foryou', 'amigos'];
+        tabs.forEach(t => {
+            const pc = document.getElementById(`tab-${t}`);
+            const mob = document.getElementById(`tab-${t}-mob`);
+            const opacity = t === aba ? 'opacity-100' : 'opacity-50';
+            const border = t === aba ? 'border-b-2 border-white pb-1' : '';
+            
+            if(pc) { pc.className = `${opacity} ${border} transition-all`; }
+            if(mob) { mob.className = `${opacity} ${border} transition-all`; }
+        });
+        carregarSprints();
+    }
+
+    function validarVideo(e) {
+        const f = e.target.files[0];
+        const btn = document.getElementById('btn-enviar');
+        const msg = document.getElementById('msg-erro');
+        
+        if (f) {
+            const v = document.createElement('video');
+            v.preload = 'metadata';
+            v.onloadedmetadata = () => {
+                window.URL.revokeObjectURL(v.src);
+                if (v.duration > 300) { 
+                    msg.innerText = "Máx 5 min."; msg.classList.remove('hidden'); 
+                    btn.disabled = true; btn.classList.add('opacity-50');
+                } else { 
+                    msg.classList.add('hidden'); btn.disabled = false; btn.classList.remove('opacity-50');
+                }
+            };
+            v.src = URL.createObjectURL(f);
+        }
+    }
+
     async function publicarSprint() {
-        const desc = document.getElementById('sprint-desc').value; const videoInput = document.getElementById('sprint-video'); if (!videoInput.files[0]) return alert("Falta o vídeo!");
-        const fd = new FormData(); fd.append('autor', USUARIO.nome); fd.append('avatar', USUARIO.avatar); fd.append('descricao', desc); fd.append('video', videoInput.files[0]);
-        await fetch(`${URL_SERVIDOR}/sprints`, { method: 'POST', body: fd }); window.location.reload();
+        const d = document.getElementById('sprint-desc').value;
+        const i = document.getElementById('sprint-video');
+        if (!i.files[0]) return showToast("Falta o vídeo", 'error');
+        
+        const btn = document.getElementById('btn-enviar');
+        btn.innerText = "A enviar..."; btn.disabled = true;
+
+        const f = new FormData();
+        f.append('autor', USUARIO.nome); f.append('avatar', USUARIO.avatar); f.append('emailAutor', USUARIO.email); f.append('descricao', d); f.append('video', i.files[0]);
+
+        try {
+            await fetch(`${URL_SERVIDOR}/sprints`, { method: 'POST', body: f });
+            location.reload();
+        } catch(e) { 
+            showToast("Erro upload", 'error'); 
+            btn.innerText = "Lançar"; btn.disabled = false; 
+        }
     }
+
+    // --- COMENTÁRIOS ---
+    async function abrirComentarios(id) {
+        sprintAbertoId = id;
+        document.getElementById('painel-comentarios').classList.remove('translate-y-full');
+        const lista = document.getElementById('lista-comentarios');
+        lista.innerHTML = '<p class="text-center text-gray-500 mt-10 animate-pulse">A carregar...</p>';
+
+        // Carrega dados frescos (necessário pois não temos websockets)
+        const res = await fetch(`${URL_SERVIDOR}/sprints`);
+        const todos = await res.json();
+        const sprint = todos.find(s => s.id === id);
+        
+        lista.innerHTML = '';
+        if (sprint && sprint.comentarios && sprint.comentarios.length > 0) {
+            sprint.comentarios.forEach(c => {
+                lista.innerHTML += `
+                    <div class="flex gap-3 mb-3">
+                        <img src="${c.avatar}" class="w-8 h-8 rounded-full object-cover">
+                        <div><p class="text-white text-sm"><span class="font-bold mr-2 text-primary">${c.autor}</span>${c.texto}</p></div>
+                    </div>`;
+            });
+        } else {
+            lista.innerHTML = '<p class="text-center text-gray-500 text-sm mt-10">Sem comentários ainda.</p>';
+        }
+    }
+
+    function fecharComentarios() { document.getElementById('painel-comentarios').classList.add('translate-y-full'); }
+
+    async function enviarComentario() {
+        const i = document.getElementById('input-comentario');
+        if (!i.value || !sprintAbertoId) return;
+        
+        const res = await fetch(`${URL_SERVIDOR}/sprints/comentar/${sprintAbertoId}`, {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ autor: USUARIO.nome, avatar: USUARIO.avatar, texto: i.value })
+        });
+
+        if (res.ok) {
+            const lista = document.getElementById('lista-comentarios');
+            if(lista.innerText.includes('Sem comentários')) lista.innerHTML = '';
+            lista.innerHTML += `<div class="flex gap-3 mb-3 animate-fade-in"><img src="${USUARIO.avatar}" class="w-8 h-8 rounded-full object-cover"><div><p class="text-white text-sm"><span class="font-bold mr-2 text-primary">${USUARIO.nome}</span>${i.value}</p></div></div>`;
+            i.value = '';
+            lista.scrollTop = lista.scrollHeight;
+        }
+    }
+
     async function likeSprint(id, btn) {
         const res = await fetch(`${URL_SERVIDOR}/sprints/like/${id}`, { method: 'POST' });
-        if(res.ok) { btn.querySelector('.material-symbols-outlined').classList.add('text-primary','font-variation-settings-[FILL:1]'); const c=btn.querySelector('.count'); c.innerText=parseInt(c.innerText)+1; }
+        if(res.ok) {
+            const icon = btn.querySelector('.material-symbols-outlined');
+            if (!icon.classList.contains('text-primary')) { // Evita spam visual
+                icon.classList.add('text-primary', 'font-variation-settings-[FILL:1]', 'animate-ping');
+                setTimeout(() => icon.classList.remove('animate-ping'), 300);
+                const c = btn.querySelector('.count'); c.innerText = parseInt(c.innerText) + 1;
+            }
+        }
     }
-    function toggleSom(v) { v.muted = !v.muted; v.parentElement.querySelector('.icon-som').innerText = v.muted ? 'volume_off' : 'volume_up'; }
+
+    function toggleSom(v) { 
+        v.muted = !v.muted; 
+        // Encontra o ícone no container pai (o snap-child)
+        const icon = v.closest('.snap-child').querySelector('.icon-som');
+        if(icon) icon.innerText = v.muted ? 'volume_off' : 'volume_up';
+    }
+
     carregarSprints();
 </script>
+
 </body>
 </html>

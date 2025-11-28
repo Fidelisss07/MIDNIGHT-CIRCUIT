@@ -2,33 +2,20 @@
 <html class="dark" lang="pt">
 <head>
     <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comunidades - Midnight Circuit</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
     <link rel="stylesheet" href="style.css">
-    
-    <script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: { extend: { colors: { primary: "rgb(var(--primary) / <alpha-value>)", "background-dark": "var(--bg-dark)", "surface-dark": "var(--surface)" }, fontFamily: { "display": ["Space Grotesk", "sans-serif"] } } }
-        }
-    </script>
+    <script src="utils.js"></script>
+    <script>tailwind.config={darkMode:"class",theme:{extend:{colors:{primary:"rgb(var(--primary) / <alpha-value>)", "background-dark":"var(--bg-dark)", "surface-dark":"var(--surface)"},fontFamily:{"display":["Space Grotesk","sans-serif"]}}}}</script>
 </head>
-<body class="transition-colors duration-300 overflow-hidden">
-
-<script>
-    const dadosSalvos = localStorage.getItem('usuario_logado');
-    if (!dadosSalvos) window.location.href = 'login.html';
-    const temaSalvo = localStorage.getItem('midnight_tema') || 'theme-red';
-    document.body.className = `${temaSalvo} font-display text-gray-200 overflow-hidden`;
-    function logout() { localStorage.removeItem('usuario_logado'); window.location.href = 'login.html'; }
-</script>
+<body class="bg-background-dark text-gray-200 overflow-hidden">
 
 <div class="relative flex h-screen w-full">
     <aside class="hidden md:flex flex-col items-center w-20 h-full border-r border-white/10 bg-black/50 backdrop-blur-md py-6 z-20">
-        <a class="mb-10 text-primary hover:scale-110 transition-transform" href="feed.html"><span class="material-symbols-outlined text-4xl">directions_car</span></a>
+        <a class="mb-10 text-primary" href="feed.html"><span class="material-symbols-outlined text-4xl">directions_car</span></a>
         <nav class="flex flex-col gap-8 w-full px-2">
             <a href="feed.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">home</span></a>
             <a href="explorar.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">search</span></a>
@@ -37,32 +24,154 @@
             <a href="chat.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">chat_bubble</span></a>
             <a href="notificacoes.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">notifications</span></a>
             <a href="perfil.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">person</span></a>
+            <a href="ranking.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">emoji_events</span></a>
+            <a href="configuracoes.html" class="flex justify-center p-3 rounded-xl text-gray-500 hover:text-white transition-colors"><span class="material-symbols-outlined">settings</span></a>
         </nav>
-        <div class="mt-auto mb-6"><button onclick="logout()" class="p-2 rounded-full bg-surface-dark hover:bg-red-600 text-gray-400 hover:text-white transition-all"><span class="material-symbols-outlined">logout</span></button></div>
+        <div class="mt-auto mb-6"><button onclick="logout()" class="p-2 text-gray-400 hover:text-red-500"><span class="material-symbols-outlined">logout</span></button></div>
     </aside>
 
-    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar bg-background-dark p-6 md:p-10">
+    <main class="flex-1 h-full overflow-y-auto relative no-scrollbar p-6 md:p-10">
         <div class="max-w-7xl mx-auto">
+            
             <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
-                <div><h1 class="text-4xl font-bold text-white mb-2">Clubes</h1><p class="text-gray-400">Encontra a tua equipa.</p></div>
-                <div class="relative w-full md:w-96 group">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><span class="material-symbols-outlined text-gray-500 group-focus-within:text-primary transition-colors">search</span></div>
-                    <input type="text" class="block w-full p-3 pl-10 text-sm text-white bg-surface-dark border border-white/10 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-600 transition-all" placeholder="Pesquisar...">
+                <div>
+                    <h1 class="text-4xl font-bold text-white mb-2">Clubes</h1>
+                    <p class="text-gray-400">Encontra a tua equipa e entra na pista.</p>
                 </div>
+                <button onclick="window.location.href='criar-comunidade.html'" class="bg-primary hover:bg-red-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg transition-transform hover:scale-105">
+                    <span class="material-symbols-outlined">add_circle</span> Criar Clube
+                </button>
             </div>
 
-            <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary">verified</span> Meus Clubes</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
-                <a href="comunidade-interna.html" class="bg-surface-dark border border-white/10 rounded-2xl overflow-hidden hover:border-primary/50 transition-all group glow-hover relative">
-                    <div class="h-24 w-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1610862295694-399587321e16?q=80&w=1000');"><div class="absolute inset-0 bg-black/30"></div></div>
-                    <div class="p-4 pt-10 relative">
-                        <div class="absolute -top-8 left-4 w-16 h-16 rounded-xl border-4 border-surface-dark bg-black bg-cover" style="background-image: url('https://i.pinimg.com/736x/2e/52/68/2e5268f70043ce4df7d6438dc2a0956b.jpg');"></div>
-                        <div class="flex justify-between items-start"><div><h3 class="text-lg font-bold text-white group-hover:text-primary transition-colors">JDM Legends PT</h3><p class="text-xs text-gray-500">14k Membros</p></div><span class="bg-green-500/10 text-green-500 text-xs font-bold px-2 py-1 rounded-full">Membro</span></div>
-                    </div>
-                </a>
+            <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2 border-b border-white/10 pb-2">
+                <span class="material-symbols-outlined text-primary">verified</span> Meus Clubes
+            </h2>
+            <div id="meus-clubes" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <p class="text-gray-500 col-span-full py-4 animate-pulse">A verificar filiações...</p>
             </div>
+
+            <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-2">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">explore</span> Descobrir
+                </h2>
+                <div class="flex gap-2 text-xs font-bold text-gray-400 bg-surface-dark p-1 rounded-lg border border-white/5">
+                    <button onclick="aplicarFiltro('populares')" id="btn-populares" class="px-3 py-1 rounded bg-white/10 text-white transition-colors">Populares</button>
+                    <button onclick="aplicarFiltro('novos')" id="btn-novos" class="px-3 py-1 rounded hover:bg-white/5 transition-colors">Novos</button>
+                </div>
+            </div>
+            
+            <div id="descobrir-clubes" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20">
+                <p class="text-gray-500 col-span-full py-4">A carregar lista global...</p>
+            </div>
+
         </div>
     </main>
 </div>
+
+<script>
+    const USUARIO = verificarLogin(); 
+    let todasComunidades = [];
+
+    async function carregarComunidades() {
+        try {
+            const res = await fetch(`${URL_SERVIDOR}/comunidades`);
+            todasComunidades = await res.json();
+            aplicarFiltro('populares');
+        } catch(e) { console.error("Erro:", e); }
+    }
+
+    function aplicarFiltro(tipo) {
+        const btnPop = document.getElementById('btn-populares');
+        const btnNov = document.getElementById('btn-novos');
+        
+        if (tipo === 'populares') {
+            btnPop.className = "px-3 py-1 rounded bg-white/10 text-white transition-colors";
+            btnNov.className = "px-3 py-1 rounded hover:bg-white/5 transition-colors";
+            todasComunidades.sort((a, b) => (b.membros?.length || 0) - (a.membros?.length || 0));
+        } else {
+            btnNov.className = "px-3 py-1 rounded bg-white/10 text-white transition-colors";
+            btnPop.className = "px-3 py-1 rounded hover:bg-white/5 transition-colors";
+            todasComunidades.sort((a, b) => b.id - a.id);
+        }
+        renderizar();
+    }
+
+    function renderizar() {
+        const divMeus = document.getElementById('meus-clubes');
+        const divOutros = document.getElementById('descobrir-clubes');
+        divMeus.innerHTML = '';
+        divOutros.innerHTML = '';
+
+        let tenhoClubes = false;
+
+        todasComunidades.forEach(c => {
+            const membros = c.membros || [];
+            const souMembro = membros.includes(USUARIO.email);
+            const online = Math.max(1, Math.floor(membros.length * 0.4)); // Simula 40% online
+
+            const statusHtml = `
+                <div class="flex items-center gap-3 text-xs text-gray-400 mt-1">
+                    <span class="flex items-center gap-1 text-green-500 font-bold"><div class="w-2 h-2 bg-green-500 rounded-full"></div> ${online} Online</span>
+                    <span>•</span>
+                    <span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">group</span> ${membros.length}</span>
+                </div>`;
+
+            if (souMembro) {
+                tenhoClubes = true;
+                divMeus.innerHTML += `
+                    <div class="bg-surface-dark border border-white/10 rounded-2xl overflow-hidden hover:border-primary/50 transition-all group glow-hover relative animate-fade-in">
+                        <div class="h-24 w-full bg-cover bg-center" style="background-image: url('${c.imagem}');"><div class="absolute inset-0 bg-black/40"></div></div>
+                        <div class="p-4 pt-10 relative">
+                            <div class="absolute -top-8 left-4 w-16 h-16 rounded-xl border-4 border-surface-dark bg-black bg-cover flex items-center justify-center text-white font-bold text-xl uppercase shadow-lg" style="background-image: url('${c.imagem}')">${c.nome.substring(0,2)}</div>
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-lg font-bold text-white group-hover:text-primary transition-colors cursor-pointer hover:underline" onclick="window.location.href='comunidade-interna.html?id=${c.id}'">${c.nome}</h3>
+                                    ${statusHtml}
+                                </div>
+                                <button onclick="sairComunidade(${c.id})" class="text-gray-500 hover:text-red-500 hover:bg-red-500/10 p-2 rounded-lg transition-all" title="Sair do Clube">
+                                    <span class="material-symbols-outlined">logout</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>`;
+            } else {
+                divOutros.innerHTML += `
+                    <div class="bg-surface-dark border border-white/5 rounded-2xl overflow-hidden hover:border-white/20 transition-all group relative animate-fade-in">
+                        <div class="h-32 w-full bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-500" style="background-image: url('${c.imagem}');"></div>
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold text-white mb-1 truncate">${c.nome}</h3>
+                            <p class="text-gray-400 text-sm mb-4 line-clamp-2 h-10">${c.descricao}</p>
+                            ${statusHtml}
+                            <button onclick="entrarComunidade(${c.id})" class="w-full mt-4 py-2 rounded-lg bg-white/5 hover:bg-primary hover:text-white text-primary font-bold transition-all flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-lg">add_circle</span> Entrar
+                            </button>
+                        </div>
+                    </div>`;
+            }
+        });
+
+        if(!tenhoClubes) divMeus.innerHTML = '<p class="text-gray-500 col-span-full py-4 italic text-center border border-dashed border-white/10 rounded-xl">Ainda não pertences a nenhuma equipa.</p>';
+    }
+
+    async function entrarComunidade(id) {
+        const res = await fetch(`${URL_SERVIDOR}/comunidades/entrar`, {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ idComunidade: id, emailUsuario: USUARIO.email })
+        });
+        if(res.ok) { showToast("Bem-vindo à equipa!"); carregarComunidades(); }
+    }
+
+    async function sairComunidade(id) {
+        if(confirm("Sair deste clube?")) {
+            const res = await fetch(`${URL_SERVIDOR}/comunidades/sair`, {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ idComunidade: id, emailUsuario: USUARIO.email })
+            });
+            if(res.ok) carregarComunidades();
+        }
+    }
+
+    carregarComunidades();
+</script>
 </body>
 </html>
